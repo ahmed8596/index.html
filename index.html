@@ -3,157 +3,136 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8" />
+    <title>حاسبة المقاس - LIGEER</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>اعرف مقاسك مع LIGEER</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #000000;
-            color: #FFFFFF;
-            text-align: center;
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: #111;
+            color: #fff;
+            margin: 0;
             padding: 20px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        h1 {
-            color: #E30613;
-            margin-top: 40px;
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background-color: #1e1e1e;
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 8px rgba(0,255,174,0.6);
+            box-sizing: border-box;
         }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-            font-size: 1.2em;
-        }
-        input {
-            padding: 10px;
-            width: 80%;
-            margin-bottom: 15px;
-            border-radius: 5px;
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
             border: none;
+            font-size: 1em;
+            box-sizing: border-box;
         }
         button {
-            padding: 12px 25px;
-            background-color: #E30613;
-            color: #FFFFFF;
+            background-color: #00ffae;
+            color: #111;
             font-weight: bold;
-            border: none;
-            border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #00e69e;
         }
         .result {
             margin-top: 20px;
-            font-size: 1.3em;
-            color: #FFD700;
+            font-size: 1.2em;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-top: 15px;
         }
         .footer {
             margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
         }
         .footer a {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: #E30613;
-            color: #FFFFFF;
+            color: #00ffae;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>اعرف مقاسك مع LIGEER</h1>
-    <p>ادخل الطول والوزن لتحصل على المقاس المناسب لك</p>
-
-    <form id="sizeForm">
-        <label for="height">الطول (سم):</label>
-        <input type="number" id="height" required />
-
-        <label for="weight">الوزن (كجم):</label>
-        <input type="number" id="weight" required />
-
-        <button type="button" onclick="calculateSize()">احسب</button>
-    </form>
-
-    <div class="result" id="result"></div>
-
-    <div class="footer">
-        <a href="https://ligeer-lr.com/ar" target="_blank">زيارة موقع LIGEER</a>
+    <div class="container">
+        <h1>🦁 LIGEER - حاسبة المقاسات</h1>
+        <p>📏 أدخل وزنك وطولك وسنقترح لك المقاس الأنسب للملابس الرياضية</p>
+        <input type="number" id="height" placeholder="طولك (سم)" />
+        <input type="number" id="weight" placeholder="وزنك (كجم)" />
+        <button onclick="calculateSize()">احسب المقاس المناسب</button>
+        <div class="result" id="result"></div>
+        <div class="note">
+            ✨ ملاحظات:<br/>
+            - المقاس الموصى به هو للراحة أثناء الحركة.<br/>
+            - في حال كنت تحب اللبس الضيق أو الواسع، يمكنك اختيار مقاس أعلى أو أقل حسب رغبتك.<br/>
+            - ننصحك بمتابعة دليل المقاسات الكامل لكل منتج.<br/>
+            - صحتك وحركتك أهم من المقاس.. استمتع بالرياضة 🏋️‍♂️💪.
+        </div>
+        <div class="footer">
+            🚀 زور متجرنا: <a href="https://ligeer-lr.com/ar" target="_blank">https://ligeer-lr.com/ar</a>
+        </div>
     </div>
 
     <script>
-        const sizeMap = [
-            { minWeight: 0,   maxWeight: 59,  minHeight: 0,   maxHeight: 159, size: 'S' },
-            { minWeight: 0,   maxWeight: 59,  minHeight: 160, maxHeight: 169, size: 'S' },
-            { minWeight: 0,   maxWeight: 59,  minHeight: 170, maxHeight: 179, size: 'M' },
-            { minWeight: 60,  maxWeight: 69,  minHeight: 0,   maxHeight: 159, size: 'M' },
-            { minWeight: 60,  maxWeight: 69,  minHeight: 160, maxHeight: 169, size: 'M' },
-            { minWeight: 60,  maxWeight: 69,  minHeight: 170, maxHeight: 179, size: 'L' },
-            { minWeight: 70,  maxWeight: 79,  minHeight: 0,   maxHeight: 159, size: 'L' },
-            { minWeight: 70,  maxWeight: 79,  minHeight: 160, maxHeight: 169, size: 'L' },
-            { minWeight: 70,  maxWeight: 79,  minHeight: 170, maxHeight: 179, size: 'XL' },
-            { minWeight: 80,  maxWeight: 89,  minHeight: 0,   maxHeight: 159, size: 'XL' },
-            { minWeight: 80,  maxWeight: 89,  minHeight: 160, maxHeight: 169, size: 'XL' },
-            { minWeight: 80,  maxWeight: 89,  minHeight: 170, maxHeight: 179, size: '2XL' },
-            { minWeight: 90,  maxWeight: 99,  minHeight: 0,   maxHeight: 159, size: '2XL' },
-            { minWeight: 90,  maxWeight: 99,  minHeight: 160, maxHeight: 169, size: '2XL' },
-            { minWeight: 90,  maxWeight: 99,  minHeight: 170, maxHeight: 179, size: '3XL' },
-            { minWeight: 100, maxWeight: 109, minHeight: 0,   maxHeight: 159, size: '3XL' },
-            { minWeight: 100, maxWeight: 109, minHeight: 160, maxHeight: 169, size: '3XL' },
-            { minWeight: 100, maxWeight: 109, minHeight: 170, maxHeight: 179, size: '4XL' },
-            { minWeight: 110, maxWeight: 999, minHeight: 0,   maxHeight: 159, size: '5XL' },
-            { minWeight: 110, maxWeight: 999, minHeight: 160, maxHeight: 169, size: '5XL' },
-            { minWeight: 110, maxWeight: 999, minHeight: 170, maxHeight: 999, size: '5XL' },
-        ];
-
-        const shortsWaistTable = [ 'S','M','L','XL','2XL','3XL','4XL','5XL' ];
-        const pantsWaistTable   = [ 'S','M','L','2XL','3XL','4XL','5XL' ];
-        const tshirtChestTable  = [ 'S','M','L','XL','2XL','3XL','4XL','5XL' ];
-        const hoodieWidthTable  = [ 'S','M','L','XL','2XL','3XL','4XL' ];
-
-        function getOverallSize(weight, height) {
-            for (let i = 0; i < sizeMap.length; i++) {
-                const item = sizeMap[i];
-                if (
-                    weight >= item.minWeight && weight <= item.maxWeight &&
-                    height >= item.minHeight && height <= item.maxHeight
-                ) {
-                    return item.size;
-                }
-            }
-            return 'S';
-        }
-
-        function getSizeFromTable(overallSize, table) {
-            if (table.includes(overallSize)) {
-                return overallSize;
-            } else {
-                const indexOrder = ['S','M','L','XL','2XL','3XL','4XL','5XL'];
-                let overallIndex = indexOrder.indexOf(overallSize);
-                while (overallIndex >= 0) {
-                    const trySize = indexOrder[overallIndex];
-                    if (table.includes(trySize)) return trySize;
-                    overallIndex--;
-                }
-                return 'S';
-            }
-        }
-
         function calculateSize() {
-            const height = parseInt(document.getElementById('height').value);
-            const weight = parseInt(document.getElementById('weight').value);
+            var weight = document.getElementById('weight').value;
+            var height = document.getElementById('height').value;
+            var result = document.getElementById('result');
 
-            const overallSize = getOverallSize(weight, height);
+            if(weight == '' || height == '') {
+                result.innerHTML = "⚠️ الرجاء إدخال الوزن والطول أولاً.";
+                return;
+            }
 
-            const shortsSize = getSizeFromTable(overallSize, shortsWaistTable);
-            const pantsSize = getSizeFromTable(overallSize, pantsWaistTable);
-            const tshirtSize = getSizeFromTable(overallSize, tshirtChestTable);
-            const hoodieSize = getSizeFromTable(overallSize, hoodieWidthTable);
+            weight = parseFloat(weight);
+            height = parseFloat(height);
 
-            document.getElementById('result').innerHTML = `
-                👕 <strong>مقاس التيشيرت المناسب:</strong> ${tshirtSize}<br>
-                🩳 <strong>مقاس الشورت المناسب:</strong> ${shortsSize}<br>
-                👖 <strong>مقاس البنطلون المناسب:</strong> ${pantsSize}<br>
-                🧥 <strong>مقاس الهودي المناسب:</strong> ${hoodieSize}
-            `;
+            // حدود البيانات المقبولة من الجداول:
+            // الوزن: تقريباً من 50 كجم إلى 140 كجم
+            // الطول: تقريباً من 150 سم إلى 200 سم
+
+            if (weight < 50 || weight > 140 || height < 150 || height > 200) {
+                result.innerHTML = "❌ عذراً، لا يمكننا تحديد مقاس مناسب للبيانات المدخلة. يرجى مراجعة دليل المقاسات أو التواصل معنا.";
+                return;
+            }
+
+            // خوارزمية بسيطة بناء على BMI
+            var bmi = weight / ((height/100)*(height/100));
+            var size = "";
+
+            if (bmi < 20) {
+                size = "S";
+            } else if (bmi >= 20 && bmi < 23) {
+                size = "M";
+            } else if (bmi >= 23 && bmi < 26) {
+                size = "L";
+            } else if (bmi >= 26 && bmi < 30) {
+                size = "XL";
+            } else if (bmi >= 30 && bmi < 34) {
+                size = "2XL";
+            } else if (bmi >= 34 && bmi < 38) {
+                size = "3XL";
+            } else if (bmi >= 38 && bmi < 42) {
+                size = "4XL";
+            } else {
+                size = "5XL";
+            }
+
+            result.innerHTML = "✅ المقاس الأنسب لك هو: <strong>" + size + "</strong>";
         }
     </script>
 </body>
